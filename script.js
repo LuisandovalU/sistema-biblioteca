@@ -121,7 +121,7 @@ const PREFIJO_STORAGE = 'biblioteca_ipn_';
 // INICIALIZACIÓN
 // ============================================================================
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     inicializarSistema();
 });
 
@@ -133,7 +133,7 @@ function inicializarSistema() {
 
 function vincularEventosDOM() {
     document.querySelectorAll('.tab-btn').forEach(boton => {
-        boton.addEventListener('click', function() {
+        boton.addEventListener('click', function () {
             cambiarPestana(this.dataset.tab);
         });
     });
@@ -148,7 +148,7 @@ function vincularEventosDOM() {
 
     const inputBusqueda = document.getElementById('buscarInventario');
     if (inputBusqueda) {
-        inputBusqueda.addEventListener('input', function() {
+        inputBusqueda.addEventListener('input', function () {
             aplicarFiltroInventario(this.value);
         });
     }
@@ -185,6 +185,11 @@ function cambiarPestana(idPestana) {
     if (contenidoActivo) contenidoActivo.classList.add('active');
 
     actualizarTodasLasVistas();
+
+    // Forzar actualización del selector al cambiar a préstamos
+    if (idPestana === 'prestamos') {
+        setTimeout(() => actualizarSelectorLibros(), 50);
+    }
 }
 
 // ============================================================================
@@ -431,7 +436,7 @@ function mostrarPrestamos() {
         contenedor.innerHTML = '<p class="empty">No hay préstamos activos.</p>';
         return;
     }
-    
+
     contenedor.innerHTML = prestamosActivos.map(p => generarTarjetaPrestamo(p)).join('');
 }
 
@@ -487,8 +492,8 @@ function generarTarjetaHistorial(prestamo) {
                 <p><strong>Usuario:</strong> ${sanitizarHTML(prestamo.nombreUsuario)}</p>
                 <p><strong>Período:</strong> ${formatearFechaLegible(prestamo.fechaInicio)} - ${formatearFechaLegible(prestamo.fechaDevolucionReal)}</p>
                 ${prestamo.multaTotal > 0
-        ? `<p><strong>Total pagado:</strong> $${prestamo.multaTotal.toFixed(2)}</p>`
-        : '<p class="text-success">Sin cargos adicionales</p>'}
+            ? `<p><strong>Total pagado:</strong> $${prestamo.multaTotal.toFixed(2)}</p>`
+            : '<p class="text-success">Sin cargos adicionales</p>'}
             </div>
         </div>
     `;
@@ -517,15 +522,30 @@ function procesarDevolucion(idPrestamo) {
 }
 
 function actualizarSelectorLibros() {
+    console.log('🔍 Actualizando selector de libros...');
     const selector = document.getElementById('libroSelectPrestamo');
-    if (!selector) return;
+    if (!selector) {
+        console.error('❌ ERROR: Selector "libroSelectPrestamo" no encontrado en el DOM');
+        return;
+    }
+    console.log('✅ Selector encontrado');
 
-    const librosDisponibles = arbolBiblioteca.obtenerListaOrdenada().filter(l => l.estado === 'Disponible');
+    const todosLosLibros = arbolBiblioteca.obtenerListaOrdenada();
+    console.log('📚 Total de libros en el sistema:', todosLosLibros.length);
+
+    const librosDisponibles = todosLosLibros.filter(l => l.estado === 'Disponible');
+    console.log('✅ Libros disponibles para préstamo:', librosDisponibles.length);
+
+    if (librosDisponibles.length === 0) {
+        console.warn('⚠️ No hay libros disponibles. Todos están prestados o no hay libros registrados.');
+    }
 
     selector.innerHTML = '<option value="">Seleccione un libro disponible...</option>' +
         librosDisponibles.map(l =>
             `<option value="${l.id}">#${l.numero} - ${sanitizarHTML(l.titulo)}</option>`
         ).join('');
+
+    console.log('✅ Selector actualizado correctamente con', librosDisponibles.length, 'libros');
 }
 
 // ============================================================================
@@ -540,7 +560,7 @@ function exportarTexto(data, name) {
     // Convertimos la estructura a texto plano
     const textoPlano = JSON.stringify(data, null, 2);
     // Creamos un Blob de tipo text/plain
-    const blob = new Blob([textoPlano], {type: 'text/plain'});
+    const blob = new Blob([textoPlano], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -554,7 +574,7 @@ function procesarImportacion(e, tipo) {
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = function(event) {
+    reader.onload = function (event) {
         try {
             // Leemos el contenido del archivo de texto
             const contenidoTexto = event.target.result;
@@ -562,22 +582,22 @@ function procesarImportacion(e, tipo) {
             const data = JSON.parse(contenidoTexto);
 
             if (tipo === 'libros') {
-                if(confirm('¿Cargar base de datos de libros (.txt)? Se reemplazarán los datos actuales.')) {
+                if (confirm('¿Cargar base de datos de libros (.txt)? Se reemplazarán los datos actuales.')) {
                     arbolBiblioteca.reconstruirDesdeArray(data);
-                    contadorSecuencial = (data.length > 0 ? Math.max(...data.map(l=>l.numero)) : 0) + 1;
+                    contadorSecuencial = (data.length > 0 ? Math.max(...data.map(l => l.numero)) : 0) + 1;
                     persistirDatos();
                     actualizarTodasLasVistas();
                     mostrarNotificacion('Base de datos cargada correctamente', 'success');
                 }
             } else {
-                if(confirm('¿Cargar base de datos de préstamos (.txt)?')) {
+                if (confirm('¿Cargar base de datos de préstamos (.txt)?')) {
                     registroPrestamos = data;
                     persistirDatos();
                     actualizarTodasLasVistas();
                     mostrarNotificacion('Base de datos de préstamos cargada', 'success');
                 }
             }
-        } catch(err) {
+        } catch (err) {
             console.error(err);
             mostrarNotificacion('Error: El archivo de texto no tiene el formato correcto', 'error');
         }
@@ -620,7 +640,7 @@ function actualizarTodasLasVistas() {
 function calcularDiasRetraso(fechaDev) {
     const hoy = new Date();
     const dev = new Date(fechaDev);
-    hoy.setHours(0,0,0,0); dev.setHours(0,0,0,0);
+    hoy.setHours(0, 0, 0, 0); dev.setHours(0, 0, 0, 0);
     const diff = Math.floor((hoy - dev) / (1000 * 60 * 60 * 24));
     return diff > 0 ? diff : 0;
 }
@@ -628,8 +648,8 @@ function calcularDiasRetraso(fechaDev) {
 function generarIdUnico() { return Date.now().toString(36) + Math.random().toString(36).substr(2); }
 function obtenerFechaActual() { return new Date().toLocaleDateString('es-MX'); }
 function formatearFechaLegible(iso) {
-    if(!iso) return '-';
-    return new Date(iso).toLocaleDateString('es-MX', {year:'numeric', month:'short', day:'numeric'});
+    if (!iso) return '-';
+    return new Date(iso).toLocaleDateString('es-MX', { year: 'numeric', month: 'short', day: 'numeric' });
 }
 function sanitizarHTML(str) {
     const d = document.createElement('div'); d.textContent = str; return d.innerHTML;
@@ -640,4 +660,4 @@ function mostrarNotificacion(msg, tipo) {
     setTimeout(() => t.className = t.className.replace('show', ''), 3000);
 }
 
-window.onclick = function(e) { if(e.target === document.getElementById('modalEditar')) cerrarModal(); }
+window.onclick = function (e) { if (e.target === document.getElementById('modalEditar')) cerrarModal(); }
