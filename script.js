@@ -419,6 +419,7 @@ function manejarRegistroPrestamo(evento) {
 }
 
 function mostrarPrestamos() {
+    actualizarSelectorLibros();
     const contenedor = document.getElementById('listaPrestamos');
     const contador = document.getElementById('totalPrestamos');
     if (!contenedor) return;
@@ -430,8 +431,8 @@ function mostrarPrestamos() {
         contenedor.innerHTML = '<p class="empty">No hay préstamos activos.</p>';
         return;
     }
+    
     contenedor.innerHTML = prestamosActivos.map(p => generarTarjetaPrestamo(p)).join('');
-    actualizarSelectorLibros();
 }
 
 function generarTarjetaPrestamo(prestamo) {
