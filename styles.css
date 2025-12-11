@@ -1,0 +1,418 @@
+/* ============================================================================
+   SISTEMA DE BIBLIOTECA IPN - ESTILO INSTITUCIONAL
+   ============================================================================ */
+
+:root {
+    /* Paleta de Colores IPN */
+    --color-primary: #6C1D45;      /* Guinda */
+    --color-primary-dark: #4B1430; /* Guinda Oscuro */
+    --color-accent: #B38E5D;       /* Dorado */
+    --color-bg: #F4F6F9;           /* Fondo Gris Pálido */
+    --color-white: #FFFFFF;
+    --color-text: #333333;
+    --color-text-light: #666666;
+
+    /* Estados */
+    --color-success: #198754;
+    --color-warning: #ffc107;
+    --color-danger: #dc3545;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.5;
+    font-size: 14px;
+    padding-bottom: 40px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* HEADER */
+.header {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    padding: 20px 0;
+    border-bottom: 4px solid var(--color-accent);
+    margin-bottom: 30px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+/* TABS (Pestañas) */
+.tabs {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 25px;
+    background: #fff;
+    border-radius: 5px 5px 0 0;
+    padding: 5px 5px 0 5px;
+}
+
+.tab-btn {
+    padding: 12px 20px;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--color-text-light);
+    transition: all 0.2s;
+    flex: 1;
+    text-align: center;
+}
+
+.tab-btn:hover {
+    color: var(--color-primary);
+    background-color: #f8f9fa;
+}
+
+.tab-btn.active {
+    color: var(--color-primary);
+    border-bottom: 3px solid var(--color-primary);
+    font-weight: 700;
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* CARDS */
+.card {
+    background: var(--color-white);
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border-top: 2px solid var(--color-accent);
+}
+
+.card h2 {
+    font-size: 18px;
+    color: var(--color-primary);
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.card-header h2 {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* FORMULARIOS */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+    font-size: 13px;
+    color: #444;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(108, 29, 69, 0.1);
+}
+
+.form-group small {
+    color: #777;
+    font-size: 12px;
+}
+
+/* BOTONES */
+.btn {
+    display: inline-block;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.btn-primary { background-color: var(--color-primary); color: white; }
+.btn-primary:hover { background-color: var(--color-primary-dark); }
+
+.btn-success { background-color: var(--color-success); color: white; }
+.btn-success:hover { background-color: #157347; }
+
+.btn-danger { background-color: var(--color-danger); color: white; }
+.btn-danger:hover { background-color: #bb2d3b; }
+
+.btn-edit { background-color: var(--color-warning); color: #212529; }
+.btn-edit:hover { background-color: #ffca2c; }
+
+.btn-block { width: 100%; display: block; }
+.btn-sm { padding: 5px 10px; font-size: 12px; }
+
+.btn-export, .btn-import {
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    color: #333;
+    font-size: 13px;
+    padding: 6px 12px;
+}
+.btn-export:hover, .btn-import:hover {
+    background: #e2e6ea;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+}
+
+/* LISTADOS */
+.libro-item, .inventario-item {
+    display: flex;
+    border: 1px solid #e0e0e0;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: #fff;
+    align-items: center;
+    border-radius: 4px;
+}
+
+.libro-numero, .inventario-numero {
+    font-weight: bold;
+    font-size: 16px;
+    color: var(--color-primary);
+    padding-right: 20px;
+    border-right: 1px solid #eee;
+    margin-right: 20px;
+    min-width: 60px;
+    text-align: center;
+}
+
+.libro-info, .inventario-info {
+    flex: 1;
+}
+
+.libro-info h3, .inventario-info h3 {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+    color: #212529;
+}
+
+.libro-info p, .inventario-info p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--color-text-light);
+}
+
+.libro-info strong, .inventario-info strong {
+    color: #444;
+}
+
+.fecha-registro {
+    font-size: 12px;
+    font-style: italic;
+    margin-top: 5px !important;
+    color: #888;
+}
+
+.inventario-acciones {
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+    margin-left: 15px;
+}
+
+/* BADGES (Etiquetas) */
+.badge {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.badge-success { background-color: #d1e7dd; color: #0f5132; }
+.badge-warning { background-color: #fff3cd; color: #664d03; }
+.badge-danger { background-color: #f8d7da; color: #842029; }
+
+/* PRÉSTAMOS */
+.prestamo-item {
+    border: 1px solid #dee2e6;
+    margin-bottom: 15px;
+    background: white;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.prestamo-header {
+    background: #f8f9fa;
+    padding: 10px 15px;
+    border-bottom: 1px solid #dee2e6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.prestamo-header h3 {
+    font-size: 15px;
+    margin: 0;
+    color: var(--color-primary);
+}
+
+.prestamo-info {
+    padding: 15px;
+    font-size: 13px;
+}
+
+.prestamo-info p { margin-bottom: 5px; }
+
+.prestamo-cobro {
+    background: #fffbf0;
+    padding: 10px 15px;
+    font-size: 13px;
+    border-top: 1px solid #f0e4c6;
+    color: #555;
+}
+
+.prestamo-atrasado {
+    border-color: var(--color-danger);
+}
+.prestamo-atrasado .prestamo-header {
+    background-color: #f8d7da;
+    color: #842029;
+}
+
+.text-danger { color: var(--color-danger); font-weight: bold; }
+.text-success { color: var(--color-success); font-weight: bold; }
+
+/* HISTORIAL */
+.historial-item {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    background: #fff;
+}
+.historial-item:last-child { border-bottom: none; }
+.historial-item h4 { margin: 0 0 5px 0; font-size: 15px; color: #333; }
+
+/* MODAL */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 5px;
+    width: 95%;
+    max-width: 500px;
+    position: relative;
+    border-top: 5px solid var(--color-primary);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.close {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+}
+.close:hover { color: #333; }
+
+/* TOAST */
+.toast {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    padding: 12px 20px;
+    position: fixed;
+    z-index: 2000;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    font-size: 14px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+.toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+.toast.success { background-color: var(--color-success); }
+.toast.error { background-color: var(--color-danger); }
+
+@keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+@keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .tabs { flex-direction: column; }
+    .libro-item, .inventario-item { flex-direction: column; text-align: center; }
+    .libro-numero, .inventario-numero { border-right: none; border-bottom: 1px solid #eee; margin: 0 0 10px 0; padding: 0 0 10px 0; width: 100%; }
+    .inventario-acciones { margin: 10px 0 0 0; flex-direction: row; justify-content: center; }
+    .card-header { flex-direction: column; gap: 10px; align-items: flex-start; }
+    .actions { width: 100%; justify-content: space-between; }
+}
