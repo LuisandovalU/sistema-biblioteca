@@ -79,6 +79,7 @@
                 <div class="card-header">
                     <h2>Catálogo Completo (Total: <span id="totalInventario">0</span>)</h2>
                     <div class="actions">
+                        <button onclick="ordenarPorTitulo()" class="btn btn-primary">AZ Ordenar por Título</button>
                         <button onclick="exportarInventario()" class="btn btn-export">Exportar</button>
                         <label class="btn btn-import">
                             Importar
@@ -136,7 +137,10 @@
             </div>
 
             <div class="card">
-                <h2>Historial de Devoluciones</h2>
+                <div class="card-header">
+                    <h2>Historial de Devoluciones</h2>
+                    <button onclick="limpiarHistorial()" class="btn btn-danger">Borrar Historial</button>
+                </div>
                 <div id="listaHistorial"></div>
             </div>
         </div>

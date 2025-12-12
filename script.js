@@ -285,7 +285,17 @@ function aplicarFiltroInventario(textoBusqueda) {
     if (!textoBusqueda || textoBusqueda.trim() === '') {
         librosResultado = arbolBiblioteca.obtenerListaOrdenada();
     } else {
-        librosResultado = arbolBiblioteca.buscarPorTexto(textoBusqueda);
+        // Detectar si es un número para usar búsqueda binaria
+        const esNumero = /^\d+$/.test(textoBusqueda.trim());
+
+        if (esNumero) {
+            const numeroBuscado = parseInt(textoBusqueda.trim());
+            const listaOrdenada = arbolBiblioteca.obtenerListaOrdenada();
+            const libroEncontrado = algoritmoBusquedaBinaria(listaOrdenada, numeroBuscado);
+            librosResultado = libroEncontrado ? [libroEncontrado] : [];
+        } else {
+            librosResultado = arbolBiblioteca.buscarPorTexto(textoBusqueda);
+        }
     }
 
     if (librosResultado.length === 0) {
@@ -521,6 +531,32 @@ function procesarDevolucion(idPrestamo) {
     }
 }
 
+function limpiarHistorial() {
+    // Verificar si hay préstamos devueltos
+    const prestamosDevueltos = registroPrestamos.filter(p => p.estado === 'Devuelto');
+
+    if (prestamosDevueltos.length === 0) {
+        mostrarNotificacion('No hay historial para borrar', 'error');
+        return;
+    }
+
+    // Pedir confirmación al usuario
+    const mensaje = `¿Está seguro de eliminar ${prestamosDevueltos.length} registro(s) del historial?\n\nEsto NO afectará los préstamos activos.`;
+
+    if (confirm(mensaje)) {
+        // Mantener SOLO los préstamos activos, eliminando los devueltos
+        registroPrestamos = registroPrestamos.filter(p => p.estado === 'Activo');
+
+        // Guardar cambios en localStorage
+        persistirDatos();
+
+        // Actualizar la vista
+        actualizarTodasLasVistas();
+
+        mostrarNotificacion(`Historial limpiado: ${prestamosDevueltos.length} registro(s) eliminado(s)`, 'success');
+    }
+}
+
 function actualizarSelectorLibros() {
     console.log('🔍 Actualizando selector de libros...');
     const selector = document.getElementById('libroSelectPrestamo');
@@ -658,6 +694,48 @@ function mostrarNotificacion(msg, tipo) {
     const t = document.getElementById('toast');
     t.textContent = msg; t.className = `toast ${tipo} show`;
     setTimeout(() => t.className = t.className.replace('show', ''), 3000);
+}
+
+// ============================================================================
+// ALGORITMOS CLÁSICOS DE INGENIERÍA DE SOFTWARE
+// ============================================================================
+
+/* [ALGORITMO 1] - Búsqueda Binaria */
+function algoritmoBusquedaBinaria(listaOrdenada, numeroBuscado) {
+    let inicio = 0;
+    let fin = listaOrdenada.length - 1;
+    while (inicio <= fin) {
+        let medio = Math.floor((inicio + fin) / 2);
+        let libroMedio = listaOrdenada[medio];
+        if (libroMedio.numero === numeroBuscado) return libroMedio;
+        if (libroMedio.numero < numeroBuscado) inicio = medio + 1;
+        else fin = medio - 1;
+    }
+    return null;
+}
+
+/* [ALGORITMO 2] - QuickSort */
+function algoritmoQuickSort(lista) {
+    if (lista.length <= 1) return lista;
+    const pivote = lista[lista.length - 1];
+    const izquierda = [];
+    const derecha = [];
+    for (let i = 0; i < lista.length - 1; i++) {
+        if (lista[i].titulo.toLowerCase() < pivote.titulo.toLowerCase()) {
+            izquierda.push(lista[i]);
+        } else {
+            derecha.push(lista[i]);
+        }
+    }
+    return [...algoritmoQuickSort(izquierda), pivote, ...algoritmoQuickSort(derecha)];
+}
+
+function ordenarPorTitulo() {
+    const listaActual = arbolBiblioteca.obtenerListaOrdenada();
+    const listaOrdenada = algoritmoQuickSort(listaActual);
+    const contenedor = document.getElementById('listaInventario');
+    renderizarListaInventario(listaOrdenada, contenedor);
+    mostrarNotificacion("Inventario ordenado por Título (QuickSort)", "success");
 }
 
 window.onclick = function (e) { if (e.target === document.getElementById('modalEditar')) cerrarModal(); }
