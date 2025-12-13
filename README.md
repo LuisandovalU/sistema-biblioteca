@@ -2,7 +2,7 @@
 
 Este proyecto es una solución ligera y eficiente para la gestión de inventarios y préstamos de libros.
 
-## 🚀 ¿Por qué JavaScript Vanilla?
+##  ¿Por qué JavaScript Vanilla?
 Decidimos utilizar **JavaScript puro (Vanilla JS)** sin frameworks pesados ni dependencias externas. Esto nos ofrece varias ventajas:
 
 * **Simplicidad:** Todo el sistema funciona con solo **3 archivos esenciales** (HTML, CSS y JS).
