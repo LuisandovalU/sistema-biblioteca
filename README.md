@@ -22,6 +22,7 @@ El proyecto se compone únicamente de:
     ```bash
     git clone https://github.com/LuisandovalU/sistema-biblioteca.git
     ```
+    
 2.  Ve a la carpeta del proyecto.
 3.  **Simplemente abre el archivo `index.html`** en tu navegador favorito (Chrome, Edge, Firefox).
 4.  ¡Listo! El sistema estará funcionando.
